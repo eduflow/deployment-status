@@ -24,9 +24,11 @@ async function run() {
       core.getInput('environment_url', {required: false}) || ''
     const state = core.getInput('state') as DeploymentState
 
-    const client = new github.GitHub(token, {previews: ['flash', 'ant-man']})
+    const client = github.getOctokit(token, {
+      previews: ['flash', 'ant-man']
+    })
 
-    await client.repos.createDeploymentStatus({
+    await client.rest.repos.createDeploymentStatus({
       ...context.repo,
       deployment_id: parseInt(deploymentId),
       state,
@@ -36,8 +38,10 @@ async function run() {
       environment_url: environmentUrl
     })
   } catch (error) {
-    core.error(error)
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.error(error)
+      core.setFailed(error.message)
+    }
   }
 }
 
