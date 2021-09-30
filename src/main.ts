@@ -25,7 +25,8 @@ async function run() {
     const state = core.getInput('state') as DeploymentState
 
     const client = github.getOctokit(token, {
-      previews: ['flash', 'ant-man']
+      previews: ['flash', 'ant-man'],
+      log: console
     })
 
     await client.rest.repos.createDeploymentStatus({
