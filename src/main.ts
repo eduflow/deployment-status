@@ -29,7 +29,7 @@ async function run() {
       log: console
     })
 
-    await client.rest.repos.createDeploymentStatus({
+    const deployment = await client.rest.repos.createDeploymentStatus({
       ...context.repo,
       deployment_id: parseInt(deploymentId),
       state,
@@ -38,6 +38,7 @@ async function run() {
       description,
       environment_url: environmentUrl
     })
+    console.log({deployment})
   } catch (error) {
     if (error instanceof Error) {
       core.error(error)
